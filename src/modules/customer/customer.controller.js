@@ -4,6 +4,7 @@ import {PROVIDER_ENUM} from "./customer.model";
 import {AuthProvider} from "../../service/authProvider/index";
 //import { buildCustomerInfo } from "./buildCustomerInfo";
 import {getOrCreateCustomer} from "./customer";
+import {AuthServices} from "../../service/Auth";
 
 
 export const create = async (req , res) =>{
@@ -34,9 +35,10 @@ export const create = async (req , res) =>{
             res.sendStatus(400);
 
         }
-            const customer = await getOrCreateCustomer(data , provider);
 
-        res.status(200).json({customer})
+            const customer = await getOrCreateCustomer(data , provider);
+            const jwtToken = AuthServices.createToken(customer)
+        res.status(200).json({token : jwtToken})
 
     }  catch (error) {
      //   res.status(400).json({message : error.message|| 'no success'});
